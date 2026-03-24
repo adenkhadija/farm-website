@@ -6,6 +6,9 @@ body{
 }
 
 @media (min-width:963px){
+    body{
+        padding:0 5%; 
+    }
     .header-nav{
         display:flex; 
         justify-content:center; 
@@ -32,9 +35,32 @@ body{
         display:none; 
     }
 
+    .role-cards{
+        display: flex; /* Horizontal centering */
+        align-items: center; 
+    }
+    .role-card{
+        justify-content: center;
+    }
+
+
+}
+
+#stats{
+    display:flex; 
+    justify-content:space-evenly; 
+    font-weight:bold; 
+    border:red solid; 
+}
+.quote{
+    display:flex; 
+    gap:20px; 
 }
 
 @media (max-width:962px){
+    body{
+        padding:0 4%; 
+    }
     .header-nav{ 
         position: fixed; 
         right: -100%; 
@@ -145,4 +171,34 @@ h2{
     align-items:center;
     text-align:center; 
     letter-spacing:1px;
+}
+
+.role-cards{
+    display:flex; 
+    flex-wrap:wrap; 
+    /* margin:5px;   */
+    justify-content:space-around; 
+    /* outline:black solid;  */
+    margin-left:auto; 
+    margin-right:auto; 
+    padding:30px; 
+
+}
+.role-card{
+    min-width:160px; 
+    border:#606C38 solid; 
+    border-radius:4px; 
+    align-items:center; 
+    padding:20px; 
+    text-align:center; 
+
+}
+
+#home{
+    max-width:900px; 
+
+}
+
+.hidden{
+    display:none; 
 }

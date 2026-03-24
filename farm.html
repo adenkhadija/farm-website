@@ -50,11 +50,336 @@
     </section>
 
     <div class="stats">
-        <p><span id="stats">70+ years</span> of experience</p>
-        <P><span id="stats">200+</span> acres managed</P>
-        <p><span id="stats">120,000</span> farmers supported</p>
-        <p><span id="stats">$15 Billion </span> Agricultural impact</p>
+        <p class="quote"><span id="stats">70+ years</span> of experience</p>
+        <P class="quote"><span id="stats">200+</span> acres managed</P>
+        <p class="quote"><span id="stats">120,000</span> farmers supported</p>
+        <p class="quote"><span id="stats">$15 Billion </span> Agricultural impact</p>
     </div>
+
+    <div id="home">
+        <h3>Welcome to the Farm</h3>
+        <p>Select your role to access your dashboard. This app demonstrates class inheritance in JavaScript</p>
+        <div class="role-cards">
+            <div class="role-card" onclick="showDash('general-worker')">
+                <div>👨‍🌾</div>
+                <h3>General Worker</h3>
+                <p>Feed animals</p>
+                <p>Collect yield</p>
+                <p>Report yield</p>
+            </div>
+
+            <div class="role-card" onclick="showDash('livestock-worker')">
+                <div>🐑</div>
+                <h3>Livestock Worker</h3>
+                <p>Walk animals,flag</p>
+                <p>Health issues</p>
+                <p>Request treatment</p>
+            </div>
+
+            <div class="role-card" onclick="showDash('vet')">
+                <div>💉</div>
+                <h3>Veterinarian</h3>
+                <p>Treat animals,</p>
+                <p>administer</p>
+                <p>vaccines,euthanise</p>
+            </div>
+
+            <div class="role-card" onclick="showDash('admin')">
+                <div>📋</div>
+                <h3>Farm Admin</h3>
+                <p>Overview,yield</p>
+                <p>reports,activity</p>
+                <p>log</p>
+            </div>
+
+
+
+        </div>
+    </div>
+    <div id="dash-container" class="hidden" >
+        <!-- general worker -->
+         <div id="dash-general-worker" class="dashboard hidden" >
+            <div class="dash-header">
+                <button onclick="goHome()"> ← Home</button>
+                <span>🧑🏽‍🌾</span> <h2>General Worker Dashbaord</h2>
+            </div>
+            <div class="tabs">
+                <button class="tabs-btn">Feed Animals</button>
+                <button class="tabs-btn">🥚 Collect & Yield Report</button>
+            </div>
+
+            <div id="gw-feed" class="tab-pane section" >
+                <h3>
+                    Animals - Marked as feed
+                </h3>
+                <table id="gw-feed-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Species</th>
+                            <th>Weight</th>
+                            <th>Feed Amount</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+
+
+                    </tbody>
+
+
+
+                </table>
+
+
+            </div>
+
+            <div id="gw-yield" class="tab-pane section">
+            <h3>Yield Producing Animals</h3>
+            <table id="gw-yield-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Species</th>
+                            <th>Weight</th>
+                            <th>Feed Amount</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody> 
+                    </tbody>
+                </table>
+         </div>
+
+
+
+         </div> <!-- general worker ending  -->
+
+
+         <div id="dash-livestock-worker" class="dashboard hidden">
+            <div class="dash-header">
+                <button onclick="goHome()"> ← Home</button>
+                <span>🐑</span> <h2>Livestock Worker Dashbaord</h2>
+            </div>
+            <div class="tabs">
+                <button class="tabs-btn">🦶 walk animals</button>
+                <button class="tabs-btn">🚑 flag for treatment</button>
+                <button class="tabs-btn">🐣 breeding</button>
+            </div>
+
+            <div id="lw-walk" class="tab-pane section" >
+                <h3>
+                    Walkable animals
+                </h3>
+
+                <table id="lw-walk-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Species</th>
+                            <th>Last walked</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+
+
+                    </tbody>
+
+
+
+                </table>
+            </div>
+
+                <div id="lw-treatment" class="tab-pane section" >
+                <h3>
+                    Flag animals for treatment/euthanise
+                </h3>
+
+                <table id="lw-treat-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Species</th>
+                            <th>Treatment Status</th>
+                            <th>Notes</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+
+
+                    </tbody>
+
+
+
+                </table>
+
+
+            </div>
+
+             <div id="lw-breed" class="tab-pane section" >
+                <h3>
+                    Breeding records
+                </h3>
+
+                <table id="lw-breed-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Species</th>
+                            <th>Breed Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+
+
+                    </tbody>
+
+
+
+                </table>
+
+
+            </div>
+
+
+            </div> 
+
+             
+
+            <!-- vet dashboard -->
+            <div id="dash-vet" class="dashboard hidden" >
+            <div class="dash-header">
+                <button onclick="goHome()"> ← Home</button>
+                <span>💉</span> <h2>Vet Dashbaord</h2>
+            </div>
+            <div class="tabs">
+                <button class="tabs-btn">🩺 Treatment Queue</button>
+                <button class="tabs-btn"> 💊 Vaccination</button>
+            </div>
+
+            <div id="vet-queue" class="tab-pane section" >
+                <h3>
+                    Animals needing treatment
+                </h3>
+                <table id="vet-queue-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Species</th>
+                            <th>Issues</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+
+
+                    </tbody>
+
+
+
+                </table>
+
+
+            </div>
+
+            <div id="vet-vaccine" class="tab-pane section" >
+                <h3>
+                    Vaccination Schedule
+                </h3>
+                <table id="vet-vax-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Species</th>
+                            <th>Last vacinated</th>
+                            <th>Due</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+
+
+                    </tbody>
+
+
+
+                </table>
+
+
+            </div>
+        </div>
+        <div id="dash-admin" class="dashboard hidden">
+            <div class="dash-header">
+                <button onclick="goHome()"> ← Home</button>
+                <span>📋</span> <h2>Admin Worker Dashbaord</h2>
+            </div>
+
+                <div class="section">
+                    <h3>Farm Overview</h3>
+                    <div class="stat-row" id="admin-stats"></div>
+                </div>
+                <div class="section">
+                    <h3>Yield Summary</h3>
+                    <table id="admin-yield-table">
+                        <thead>
+                            <tr>
+                                <th>Animal</th>
+                                <th>Product</th>
+                                <th>Expected</th>
+                                <th>Collected</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+
+                    </table>
+                </div>
+
+
+                <div class="section">
+                    <h3>Animal Roster</h3>
+                    <table id="admin-roster">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Species</th>
+                                <th>Weight Cat</th>
+                                <th>Feed</th>
+                                <th>Health</th>
+                                <th>Vacinated</th>
+                            </tr>
+                        </thead>
+
+                    </table>
+                </div>
+                <div class="section">
+                    <h3>Activity Log</h3>
+                    <div class="log" id="activity-log">
+
+                    </div>
+                </div>
+
+            </div>
+
+
+         
+
+
+    </div>
+
+
+
 
 
 </main>
