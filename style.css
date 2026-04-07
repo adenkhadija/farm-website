@@ -6,6 +6,7 @@ body{
 }
 
 @media (min-width:963px){
+    /* desktop design end */
     body{
         padding:0 5%; 
     }
@@ -44,18 +45,67 @@ body{
     }
 
 
-}
+}     /* desktop design end */
 
-#stats{
-    display:flex; 
-    justify-content:space-evenly; 
+
+.stats-num{
     font-weight:bold; 
-    border:red solid; 
+    font-size:25px; 
+    
 }
 .quote{
     display:flex; 
-    gap:20px; 
+    flex-direction:column; 
+    gap: 3px; 
+    align-items:flex-start;
+
+
 }
+.stats-label{
+    font-size: 12px; 
+}
+
+.dash-header{ 
+    display:flex; 
+    justify-content:flex-start;
+    align-items:center; 
+    gap:8px; 
+    color:#FEFAE0; 
+    font-family:'Lora'; 
+
+    background-color:#606C38; 
+    margin-top: 5px; 
+    padding:4%;
+    border-radius:3%;
+
+
+    
+
+}
+
+.homeBtn{
+    all:unset; 
+    cursor:pointer; 
+    font-size:20px; 
+    font-weight:bold;
+    letter-spacing:1.5px;
+    padding: 5px; 
+    margin: 3px; 
+    border-radius: 5px; 
+    /* border:red solid;  */
+
+    display:flex; 
+    gap: 5px;
+    transition:all 0.3s ease; 
+
+}
+
+.homeBtn:hover{
+    background-color:#283618; 
+    color:white; 
+
+}
+
 
 @media (max-width:962px){
     body{
@@ -148,6 +198,8 @@ h2{
     color:#283618;  
     font-family: "Lora";
     font-weight:400; 
+    justify-content:space-around;  
+    border: 0.5px solid #283618; 
 }
 #beginning{
     display:flex;  
@@ -201,4 +253,12 @@ h2{
 
 .hidden{
     display:none; 
+}
+
+.tab-pane{
+    display:none; 
+}
+
+.active{
+    display:block; 
 }

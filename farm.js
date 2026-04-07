@@ -2,6 +2,9 @@ let home = document.getElementById('home');
 let container = document.getElementById('dash-container'); 
 
 
+// let nav = document.querySelector('.header-nav'); // selecting class
+let headerNav = document.getElementsByClassName('header-nav')[0]; // Array 
+
 let showDash = (role) => {
     home.classList.add('hidden'); 
 
@@ -12,7 +15,8 @@ let showDash = (role) => {
     
     let dashBoard = document.getElementById(`dash-${role}`)
     dashBoard.classList.remove('hidden'); 
-   
+
+    renderDash(role)
 
 
 
@@ -24,13 +28,28 @@ let goHome = () =>{
 
 }
 
+// let buttons = document.querySelectorAll('.tabs-btn'); 
+// // console.log(buttons); 
+let switchTabs = (prefix, tabId) => {
+    
+
+    let dash = document.querySelector('.dashboard:not(.hidden)') //div with dashboard but no hidden class name -- active 
+    
+    let tabPanes = dash.querySelectorAll('.tab-pane') //nodelist
+    tabPanes.forEach(current => current.classList.remove('active')) // absense of {} --> implicit return
+
+
+    let Tab = document.getElementById(prefix + '-' + tabId); 
+    Tab.classList.add('active'); 
+}
+
+
+
+
 
 
 let hamburger = document.getElementById('hamburger'); 
 let cancel = document.getElementById('cancel');
-// let nav = document.querySelector('.header-nav'); // selecting class
-let headerNav = document.getElementsByClassName('header-nav')[0]; // Array 
-
 
 
 hamburger.addEventListener('click', () => {
@@ -49,44 +68,44 @@ cancel.addEventListener('click', () =>{
 
 class Animal{
     constructor(name,species,weightKg,icon){
-        name = name; 
-        species = species; 
-        weightKg = weightKg; 
-        icon = icon
-        isfeed = false; 
-        lastfeed = null; 
-        treatmentStatus = null; 
-        treatmentNote = ""; 
-        lastVacinated = "01-01-2025"; 
-        breedStatus = "none"; 
-        isAlive = true; 
+        this.name = name; 
+        this.species = species; 
+        this.weightKg = weightKg; 
+        this.icon = icon
+        this.isfeed = false; 
+        this.lastfeed = null; 
+        this.treatmentStatus = null; 
+        this.treatmentNote = ""; 
+        this.lastVacinated = "01-01-2025"; 
+        this.breedStatus = "none"; 
+        this.isAlive = true; 
     }
     feed(isfeed){
-        isfeed = true;  
-        lastfeed = new Date().toLocaleDateString();  // creates a date object
+        this.isfeed = true;  
+        this.lastfeed = new Date().toLocaleDateString();  // creates a date object
         //trigger the activity log
         log(`${this.name} was last fed at ${this.lastfeed}`)
     }
     vacinate(){
-        lastVacinated = new Date().toLocaleDateString(); 
+        this.lastVacinated = new Date().toLocaleDateString(); 
         log(`${this.name} was vacinated at ${this.lastVacinated}`)
     }
     treat (){
-        treatmentStatus = 'treated';  
+        this.treatmentStatus = 'treated';  
         log(`${this.name} was treated`)
     }
     euthanise(){
-        isAlive = false; 
-        treatmentStatus = "euthanise"; 
+        this.isAlive = false; 
+        this.treatmentStatus = "euthanise"; 
         log(`${this.name} was euthanise`)
     }
     breed() {
-        breedStatus = 'bred'; 
+        this.breedStatus = 'bred'; 
         log(`${this.name} was breed`)
     }
     flagTreatment(note){
-        treatmentStatus = "Flagged"
-        treatmentNote = note; 
+        this.treatmentStatus = "Flagged"
+        this.treatmentNote = note; 
         log(`${this.name} was flagged for treatment ${this.note}`)
     }
      get weightCat(){
@@ -103,7 +122,6 @@ class Animal{
     get feedAmount(){
 
         let rates = { small: 0.2, medium: 2, large: 5}
-        log(`${this.name} feed ${rate} `)
         return rates[this.weightCat] // rates['small'] rates['medium'], or rates[large]
        
     }
@@ -115,82 +133,162 @@ class Sheep extends Animal{
     constructor(name) {
         super(name, 'sheep', 70, '🐑' )
 
-        expectedWoolYield = 4; 
-        collectedWool = null; 
-        isWalkable = true; 
-        lastWalked = null; 
+        this.expectedWoolYield = 4; 
+        this.collectedWool = null; 
+        this.isWalkable = true; 
+        this.lastWalked = null; 
 
     }
     shear(s){
         this.collectedWool = s; 
-        if (this.collectedWool < expectedWoolYield){
+        if (this.collectedWool < this.expectedWoolYield){
             log(`LOW YIELD ⚠️ ${this.name} wool ${s} `)
         }
+        
     }
     walk(){
         let walkedDate = new Date().toLocaleTimeString()
         this.lastWalked = walkedDate; 
         log(`${this.name} walked 🚶🏻`)
     }
+    // getter method -- return string wool (kg)
+    get yieldProduct(){
+        return 'wool (kg)'
+
+    }
+    //expected wool yield
+    get expectedYield(){
+        return this.expectedWoolYield
+    }
+    get collectedYield(){
+        return this.collectedWool
+    }
+
+    setCollectedYield(shearAmt){
+        this.shear(shearAmt)
+
+    }
+
+
 
 }
 
 class Goat extends Animal{
     constructor(name) {
-    super(name, species, weightKg, icon)
+    super(name, 'goat', 63, '🐐')
 
     }
+    ExpectedYield = 10;
+    collectedMilk = null;
+    isWalkable = true; 
+    lastWalked = null; 
 
+    collectMilk(l){ 
+        this.collectedMilk = l
+        log(`collected ${l} from ${this.name}`)
 
+        if(l < this.ExpectedYield){
+
+            log(`⚠️ low yield,${this.name} yield ${l}`)
+        }
+        else{
+            log()
+        }
+    }
+
+     walk(){
+        this.lastWalked = new Date().toLocaleTimeString(); 
+        log(`${this.name} walked `)
+    }
+
+    get yieldProduct(){
+        return 'milk (l)'
+    }
+    get expectedYield (){
+        return this.ExpectedYield
+
+    } 
+    get collectedYield() {
+        return this.collectedMilk
+    }
+
+    setCollectedYield(amt){
+        this.collectMilk(amt)
+    }
 
 }
 
 class Chicken extends Animal{
     constructor(name, species, weightKg, icon) {
-    super(name, species, weightKg, icon)
-    eggYieldPerDay = 1
-    collectedEggs = null; 
-    isWalkable = false; 
+    super(name, 'chicken', 13, "🐥")
+    
+    this.eggYieldPerDay = 1
+    this.collectedEggs = null; 
+    this.isWalkable = false; 
 
     }
-    collectedEggs(count){
+    collectEggs(count){
         this.collectedEggs = count; 
-        if (count < eggYieldPerDay){
+        if (count < this.eggYieldPerDay){
             log(`LOW YIELD ⚠️ collected ${count} eggs`)
         }
         log(`${this.name} yield ${count} eggs `)
         
     }
+    get yieldProduct(){
+        return 'eggs'
+    }
+    get expectedYield (){
+        return this.eggYieldPerDay
+
+    } 
+    get collectedYield() {
+        return this.collectedEggs
+    }
+
+    setCollectedYield(amt){
+        this.collectEggs(amt)
+    }
+
  
 
 }
 class Pig extends Animal{
     constructor(name) {
-    super(name, species, weightKg, icon)
-
+    super(name, "Pigs", 120, '🐷' )
 
     }
+    //outside the constructor - no this but inside constructor -- you need it 
+    isWalkable = false; 
+
 
 }
 
 class Horse extends Animal{
     constructor(name) {
-    super(name, species, weightKg, icon)
+    super(name, "Horse", 500,"🐎" )
     
-    iswalkable = false; 
+    this.iswalkable = true; 
+    this.lastWalked = null; 
 
     }
+    // methods 
+    walk(){
+        this.lastWalked = new Date().toLocaleTimeString(); 
+        log(`${this.name} walked `)
+    }
+
 
 }
 class Cow extends Animal{
     
     constructor(name) {
-    super(name, 'cow', 600, 'icon')
+    super(name, 'cow', 600, '🐄')
 
     //special properties of cow 
-    ExpectedYield = 25
-    collectedMilk = null //how many liters
-    isWalkable = false 
+    this.ExpectedYield = 25
+    this.collectedMilk = null //how many liters
+    this.isWalkable = false 
 
 
     }
@@ -207,6 +305,20 @@ class Cow extends Animal{
             log()
         }
     }
+    get yieldProduct(){
+        return 'milk (l)'
+    }
+    get expectedYield(){
+        return this.ExpectedYield
+    }
+    get collectedYield() {
+        return this.collectedMilk; 
+    }
+    setCollectedYield(amt){
+        this.collectMilk(amt)
+    }
+
+
 
 }
 
@@ -214,10 +326,130 @@ class Cow extends Animal{
 let activityLog = []
 
 let log = (msg) =>{
-    let currentDate = new Date.toLocaleTimeString()
+    let currentDate = new Date().toLocaleTimeString()
     activityLog.unshift(`${currentDate} ${msg}`)
 
 }
+
+// ======== Farm data ============
+let animals = [
+        new Cow('betsy'), new Cow('daisy'), new Cow('shelby'),    
+        new Sheep('Juno'), new Sheep('Shawn'), 
+        new Chicken('Coco'), new Chicken('Gigi'), new Chicken('June'),
+        new Horse('Phoenix'), new Horse('Jasper'), 
+        new Pig('Ace'), new Pig('Leo'),
+        new Goat('Levi'), new  Goat('Duke')
+    ]
+// ===== navigations =========
+
+
+// ====== Rander table ==========
+
+let renderDash = (role) => {
+    if (role === 'general-worker' ){
+        renderGeneralWorker() // render the table for general worker -- innerHTML 
+    }
+    if (role === 'livestock-worker' ){
+        renderLivestockWorker()
+    }
+    if(role === 'vet'){
+        renderVet()
+    }
+    if(role === 'Admin'){
+        renderAdmin()
+
+    }
+
+}
+//function badge 
+
+let renderGeneralWorker = () => {
+    let tbody = document.querySelector('#gw-feed-table tbody'); 
+    console.log('tbody',tbody)
+    tbody.innerHTML = ''; 
+    let AliveAnimals = animals.filter((currentAnimal) => {
+        return currentAnimal.isAlive 
+    }) //animals that are alive
+
+    AliveAnimals.forEach(y => {
+        
+        let tr = document.createElement('tr')
+        tr.innerHTML = `
+            <td>${y.name} ${y.icon} </td> 
+            <td>${y.species}</td> 
+            <td>${y.weightKg} ${y.weightCat} </td>  
+            <td>${y.feedAmount}</td>  
+            <td>${y.isfeed ? badge('fed', 'green') : badge('hungry', 'red')} </td>  
+            <td>${y.isfeed ? badge('fed', 'green') : `<button onclick="Dofeed('${y.name}')">feed</button>`}</td> `
+           tbody.appendChild(tr)
+
+    })
+
+    // tbdoy for second table --> homework : yield 
+    let yieldTbody = document.querySelector('#gw-yield tbody')
+    yieldTbody.innerHTML = ''; // make sure it doesn't duplicate the table
+
+    let productAnimal = AliveAnimals.filter(curr => hasYield(curr))
+    
+        
+    //console.log(productAnimal)
+    
+
+    productAnimal.forEach(animal => {
+        let row = document.createElement('tr') 
+        let collected = animal.collectedYield !== null ? animal.collectedYield : "--"
+
+        let done = animal.collectedYield !== null
+        row.innerHTML = `
+        <td>${animal.icon} ${animal.name}</td>
+        <td> ${animal.species}</td>
+        <td>${animal.yieldProduct} </td>
+        <td> ${animal.expectedYield}</td> 
+        <td> ${collected} </td> 
+        <td> ${done ? badge('Reported', 'green') : `<input type="number" id="yield-${animal.name}" placeholder=0> <button onclick="report('${animal.name}')">Report</button>`} </td>
+        `
+        yieldTbody.appendChild(row)
+
+
+    })
+}
+
+
+let hasYield = (animal) =>{
+    // boolean
+    //if (animal.yieldProduct) return true
+     return animal.yieldProduct ? true : false 
+
+}
+
+
+let badge = (text, color) =>{
+    return `<span class='badge badge-${color}'>${text}</span> ` 
+}
+
+let Dofeed = (y) =>{
+    const a = animals.find(x => x.name === y)
+    a.feed(); 
+    renderGeneralWorker(); 
+
+}
+
+let report = (name) =>{
+    const AA = animals.find(a => a.name === name ) 
+    
+
+    let value = parseFloat(document.getElementById(`yield-${name}`).value); //
+    if (isNaN(value) || value <= 0 ) return alert('Enter a number')
+   
+    AA.setCollectedYield(value)
+    renderGeneralWorker(); 
+
+}
+
+
+
+
+
 
 
 
