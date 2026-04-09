@@ -74,7 +74,7 @@ class Animal{
         this.icon = icon
         this.isfeed = false; 
         this.lastfeed = null; 
-        this.treatmentStatus = null; 
+        this.treatmentStatus = "Healthy"; 
         this.treatmentNote = ""; 
         this.lastVacinated = "01-01-2025"; 
         this.breedStatus = "none"; 
@@ -363,13 +363,16 @@ let renderDash = (role) => {
 }
 //function badge 
 
+ let AliveAnimals = animals.filter((currentAnimal) => {
+        return currentAnimal.isAlive 
+    }) 
+
 let renderGeneralWorker = () => {
     let tbody = document.querySelector('#gw-feed-table tbody'); 
-    console.log('tbody',tbody)
     tbody.innerHTML = ''; 
-    let AliveAnimals = animals.filter((currentAnimal) => {
-        return currentAnimal.isAlive 
-    }) //animals that are alive
+    // let AliveAnimals = animals.filter((currentAnimal) => {
+    //     return currentAnimal.isAlive 
+    // }) //animals that are alive
 
     AliveAnimals.forEach(y => {
         
@@ -399,7 +402,7 @@ let renderGeneralWorker = () => {
         let row = document.createElement('tr') 
         let collected = animal.collectedYield !== null ? animal.collectedYield : "--"
 
-        let done = animal.collectedYield !== null
+        let done = animal.collectedYield !== null //starts null 
         row.innerHTML = `
         <td>${animal.icon} ${animal.name}</td>
         <td> ${animal.species}</td>
@@ -413,6 +416,120 @@ let renderGeneralWorker = () => {
 
     })
 }
+
+/// ==== livestock worker 
+
+let renderLivestockWorker = () => {
+    const walkTable = document.querySelector('#lw-walk-table tbody'); 
+    walkTable.innerHTML = ''; 
+
+
+    let walkAnimals = AliveAnimals.filter(walk => walk.isWalkable)
+    
+
+    walkAnimals.forEach(animal => {
+        let row = document.createElement('tr')
+
+        let walked = animal.lastWalked !== null ? animal.lastWalked : "--"  //
+        let done = animal.lastWalked !== null //starts of as false 
+
+
+        row.innerHTML = `
+        <td> ${animal.name} ${animal.icon}</td> 
+        <td> ${animal.species}</td> 
+        <td> ${walked}</td> 
+        <td> ${done ? badge('walked', 'green') : `<button onclick ="walkfunc('${animal.name}')">walk</button>`  }
+
+        
+        `
+        walkTable.appendChild(row)
+
+
+
+    })
+
+    let healthBadge = (status) =>{
+    if (status === 'Healthy') {
+        return badge('Healthy', 'green')
+    }
+    if (status === 'Flagged') {
+        return badge('Flagged', 'red')
+    }
+    if (status === 'Euthanise'){
+        return badge('Euthanise', 'gray')
+    }
+  
+
+}
+
+
+
+     const treatmentTable = document.querySelector('#lw-treat-table tbody'); 
+     treatmentTable.innerHTML = ''; 
+
+     AliveAnimals.forEach(animal =>{
+        let flagged = animal.treatmentStatus === 'Flagged' || animal.treatmentStatus === 'treated'; //false
+      
+        let row = document.createElement('tr')
+        let treat = animal.treatmentStatus !== null; 
+        
+
+        row.innerHTML = `
+        <td> ${animal.name} ${animal.icon}</td>
+        <td> ${animal.species}</td> 
+        <td> ${healthBadge(animal.treatmentStatus)} </td> 
+        <td> ${animal.treatmentNote || '--'} </td> 
+        <td> ${!flagged ? `<input type="text" id="note-${animal.name}" placeholder="issue"></input>
+        <button onclick="flagged('${animal.name}')" >Flag treatment</button>` : '<em>Flagged</em>' } </td> 
+      
+        `
+        treatmentTable.appendChild(row)
+
+        //treatmentStatus -- 3 options : treat, euthanise, flagged 
+     })
+
+
+     // "bessie"
+
+     let bredTable = document.querySelector('#lw-breed-table tbody')
+     bredTable.innerHTML = ''; 
+     AliveAnimals.forEach(animal => {
+        bredTable.innerHTML += `
+            <tr>
+                <td> ${animal.name} ${animal.icon}</td>  
+                <td> ${animal.species}</td>
+                <td> ${badge(animal.breedStatus === 'bred' ? "Bred" : "none", animal.breedStatus === 'bred' ? 'green' : "gray" )}</td>
+                <td> ${animal.breedStatus !== "bred" ? `<button onclick="breed('${animal.name}')"> Record breeding </button>` : "<em>Bred</em>"}</td>
+            </tr>
+        `
+     })
+
+
+
+}
+let breed = (name) =>{
+    let currA = animals.find(animal => animal.name === name)
+    currA.breed(name)
+    renderLivestockWorker()
+}
+let flagged = (name) =>{
+    let currA = animals.find(animal => animal.name === name)
+    let note =  document.getElementById(`note-${name}`).value
+    // update note 
+    currA.flagTreatment(note)
+    renderLivestockWorker()
+
+}
+
+let walkfunc = (name) =>{
+    // update the last walked column to correct date 
+    const Single = animals.find(x => x.name === name) // animal object
+    // console.log("Single", Single)
+    Single.walk()
+    renderLivestockWorker()
+
+}
+
 
 
 let hasYield = (animal) =>{
@@ -435,7 +552,7 @@ let Dofeed = (y) =>{
 }
 
 let report = (name) =>{
-    const AA = animals.find(a => a.name === name ) 
+    const AA = animals.find(a => a.name === name ) //animal object
     
 
     let value = parseFloat(document.getElementById(`yield-${name}`).value); //
