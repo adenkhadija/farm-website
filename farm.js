@@ -59,7 +59,7 @@ hamburger.addEventListener('click', () => {
     hamburger.classList.add('close'); // adding class 
     cancel.classList.remove('close'); 
 })
-
+// i'm here
 cancel.addEventListener('click', () =>{
     headerNav.classList.replace('visableHeader','header-nav'); 
     hamburger.classList.remove('close'); 
@@ -76,7 +76,7 @@ class Animal{
         this.lastfeed = null; 
         this.treatmentStatus = "Healthy"; 
         this.treatmentNote = ""; 
-        this.lastVacinated = "01-01-2025"; 
+        this.lastVacinated = new Date(2025,0,1).toLocaleDateString(); //"2025-01-01" 
         this.breedStatus = "none"; 
         this.isAlive = true; 
     }
@@ -370,9 +370,7 @@ let renderDash = (role) => {
 let renderGeneralWorker = () => {
     let tbody = document.querySelector('#gw-feed-table tbody'); 
     tbody.innerHTML = ''; 
-    // let AliveAnimals = animals.filter((currentAnimal) => {
-    //     return currentAnimal.isAlive 
-    // }) //animals that are alive
+
 
     AliveAnimals.forEach(y => {
         
@@ -506,7 +504,7 @@ let renderLivestockWorker = () => {
 
 
 
-}
+} // end
 let breed = (name) =>{
     let currA = animals.find(animal => animal.name === name)
     currA.breed(name)
@@ -515,7 +513,6 @@ let breed = (name) =>{
 let flagged = (name) =>{
     let currA = animals.find(animal => animal.name === name)
     let note =  document.getElementById(`note-${name}`).value
-    // update note 
     currA.flagTreatment(note)
     renderLivestockWorker()
 
@@ -563,13 +560,135 @@ let report = (name) =>{
 
 }
 
+let renderVet = () => {
+    let Qtable = document.querySelector('#vet-queue-table tbody'); 
+    Qtable.innerHTML = ''; 
+    
+    //false
+
+    // only animals with Treatment Status flagged 
+
+    flaggedAnimals = AliveAnimals.filter(animal => ['Flagged', 'treated', 'euthanise'].includes(animal.treatmentStatus))
+
+    flaggedAnimals.forEach(animal => {
+        
+        Qtable.innerHTML += `
+        <tr>
+            <td> ${animal.name} ${animal.icon}</td>
+            <td> ${animal.species}</td>
+            <td> ${animal.treatmentNote? animal.treatmentNote : "no issues"}</td>
+            <td> ${animal.treatmentStatus}</td>
+            <td> ${animal.treatmentStatus === 'Flagged'?  `<button onclick="treated('${animal.name}')"> Mark Treated</button> <button onclick="euthanise('${animal.name}')">Euthanise</button>`
+            : '<em>resolved</em>' } 
+            </td>
+
+        </tr>  `
+
+    })
+  
+
+    let vaxTable = document.querySelector('#vet-vax-table tbody')
+    vaxTable.innerHTML = ''; 
+
+    AliveAnimals.forEach(animal => {
+        let lastDate = new Date(animal.lastVacinated)
+        let dueDate = new Date(lastDate)  
+        dueDate.setMonth(dueDate.getMonth() + 6)
+       
+        
+        let overdue = dueDate < new Date() 
+       
+        let due =  dueDate.toLocaleDateString()
+        
+        vaxTable.innerHTML += `
+        <tr>
+            <td> ${animal.name}</td>
+            <td> ${animal.species}</td>
+            <td> ${animal.lastVacinated}</td>
+            <td> ${overdue? badge(due + ' OVERDUE','red') : badge(due, 'green') }</td>
+            <td> <button onclick="vaccinate('${animal.name}')">Vaccinate</button></td>
+
+        </tr>
+        `
+
+    })
 
 
 
+}
+
+let treated = (name) => {
+    const AA = animals.find(a => a.name === name ) //animal object
+    AA.treat()
+    renderVet()
+}
+
+let euthanise = (name) =>{
+
+    
+    let verification = confirm(`confirm euthanasia for ${name}`) // true or false 
+    if (verification) {
+        const AA = animals.find(a => a.name === name ) //animal object
+        AA.euthanise()
+        renderVet()
+    }
 
 
+}
+let vaccinate = (name) =>{
+    const AA = animals.find(a => a.name === name ) //animal object
+    AA.vacinate()
+    renderVet()
+}
+
+let renderAdmin = () => {
+    console.log("admin")
+    
+
+    let aliveCount = AliveAnimals.length; 
+    let fedCount = AliveAnimals.filter(animal => animal.isfeed).length;
+    let sickCount = AliveAnimals.filter(animal => animal.treatmentStatus === 'Flagged').length;
+    let yieldCount = AliveAnimals.filter(animal => hasYield(animal)).length;
+    let dead = AliveAnimals.filter(animal => !animal.isAlive).length; 
 
 
+    let AdminStats = document.querySelector('#admin-stats')
+    AdminStats.innerHTML = `
+    <div
+        <div>${aliveCount}</div>  
+        <div>alive animals</div> 
+    </div>
+    
+    <div>
+        <div>${fedCount}</div>
+        <div>Fed today</div>
+    </div>
+         
+
+     <div>
+        <div>${sickCount}</div>
+        <div>Awaiting Treatment</div>
+    </div>
+    
+
+     <div>
+
+        <div>${yieldCount}</div>
+        <div>Yield Report</div>
+    
+    </div>
+
+     <div>
+        <div>${dead}</div>
+        <div>Euthanised</div>
+    
+    </div>
+    
+    `
+    
+
+    
+}
 
 
 
